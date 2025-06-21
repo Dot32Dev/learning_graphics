@@ -1,0 +1,7 @@
+lib/.DS_Store
+.DS_Store
+*.o
+*.d
+lib/lib-arm64/libglfw3.a
+lib/lib-arm64/libglfw.3.dylib
+graphics
