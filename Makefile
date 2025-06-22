@@ -6,6 +6,7 @@ CFLAGS = -std=c99 -Wall -Wextra -Wno-unused-parameter -Isrc -Ilib/include $(cfla
 LDFLAGS = lib/lib-arm64/libglfw3.a
 
 LDFLAGS += -framework OpenGL -framework IOKit -framework CoreVideo -framework Cocoa
+CFLAGS += -fsanitize=address -g
 
 EXE = $(PROJECT_NAME)
 OBJ = src/main.o \
