@@ -86,10 +86,9 @@ int main(void) {
 
 	int scaleLocation = glGetUniformLocation(program, "scale");
 
-	while (!glfwWindowShouldClose(window))
-	{
+	glUseProgram(program);
+	while (!glfwWindowShouldClose(window)) {
 		glClear(GL_COLOR_BUFFER_BIT);
-		glUseProgram(program);
 
 		int width, height;
 		glfwGetWindowSize(window, &width, &height);
