@@ -46,9 +46,9 @@ int main(void) {
 
 	// Vertices
 	GLfloat vertices[] = {
-		0.0, 0.5, 0.0,
-		0.5, -0.5, 0.0,
-		-0.5, -0.5, 0.0,
+		0.0, 150.0, 0.0,
+		150.0, -150.0, 0.0,
+		-150.0, -150.0, 0.0,
 	};
 
 	GLuint program = glCreateProgram();
@@ -84,16 +84,16 @@ int main(void) {
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 
-	int vertexColorLocation = glGetUniformLocation(program, "ourColor");
+	int scaleLocation = glGetUniformLocation(program, "scale");
 
 	while (!glfwWindowShouldClose(window))
 	{
 		glClear(GL_COLOR_BUFFER_BIT);
 		glUseProgram(program);
 
-		float timeValue = glfwGetTime();
-		float greenValue = (sin(timeValue) / 2.0f) + 0.5f;
-		glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f);
+		int width, height;
+		glfwGetWindowSize(window, &width, &height);
+		glUniform2f(scaleLocation, width, height);
 
 		glBindVertexArray(VAO);
 		glDrawArrays(GL_TRIANGLES, 0, 3);
