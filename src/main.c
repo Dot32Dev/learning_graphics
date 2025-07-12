@@ -6,6 +6,9 @@
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>
 
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb_image/stb_image.h>
+
 int main(void) {
 	if (!glfwInit()) return -1;
 
@@ -45,10 +48,20 @@ int main(void) {
 	fclose(vert_file);
 
 	// Vertices
+	// GLfloat vertices[] = {
+	// 	0.0, 150.0, 0.0,
+	// 	150.0, -150.0, 0.0,
+	// 	-150.0, -150.0, 0.0,
+	// };
 	GLfloat vertices[] = {
-		0.0, 150.0, 0.0,
-		150.0, -150.0, 0.0,
-		-150.0, -150.0, 0.0,
+		// positions          // texture coords
+		150.0f,  150.0f, 0.0f,     1.0f, 1.0f,   // top right
+		150.0f, -150.0f, 0.0f,     1.0f, 0.0f,   // bottom right
+		-150.0f, -150.0f, 0.0f,     0.0f, 0.0f,   // bottom left
+
+		-150.0f, -150.0f, 0.0f,     0.0f, 0.0f,   // bottom left
+		-150.0f,  150.0f, 0.0f,     0.0f, 1.0f,    // top left
+		150.0f,  150.0f, 0.0f,     1.0f, 1.0f,   // top right 
 	};
 
 	GLuint program = glCreateProgram();
@@ -78,13 +91,35 @@ int main(void) {
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW); // steam, static or dynamic
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 5, (void*)0);
 	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);  
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 
 	int scaleLocation = glGetUniformLocation(program, "scale");
+
+	// Textures
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	int imageWidth, imageHeight, nrChannels;
+	unsigned char *data = stbi_load("res/tileset.png", &imageWidth, &imageHeight, &nrChannels, 4);
+
+	unsigned int texture;
+	glGenTextures(1, &texture);  
+	glBindTexture(GL_TEXTURE_2D, texture);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, imageWidth, imageHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+	glGenerateMipmap(GL_TEXTURE_2D);
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	stbi_image_free(data);
+
 
 	glUseProgram(program);
 	while (!glfwWindowShouldClose(window)) {
@@ -94,8 +129,9 @@ int main(void) {
 		glfwGetWindowSize(window, &width, &height);
 		glUniform2f(scaleLocation, width, height);
 
+		// glBindTexture(GL_TEXTURE_2D, texture);
 		glBindVertexArray(VAO);
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+		glDrawArrays(GL_TRIANGLES, 0, 6);
 		
 		glfwSwapBuffers(window);
 		glfwPollEvents();

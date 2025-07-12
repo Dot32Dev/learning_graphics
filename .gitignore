@@ -5,3 +5,4 @@ lib/.DS_Store
 lib/lib-arm64/libglfw3.a
 lib/lib-arm64/libglfw.3.dylib
 graphics
+lib/include/stb_image/stb_image.h
