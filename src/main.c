@@ -55,13 +55,13 @@ int main(void) {
 	// };
 	GLfloat vertices[] = {
 		// positions          // texture coords
-		150.0f,  150.0f, 0.0f,     1.0f, 1.0f,   // top right
-		150.0f, -150.0f, 0.0f,     1.0f, 0.0f,   // bottom right
-		-150.0f, -150.0f, 0.0f,     0.0f, 0.0f,   // bottom left
+		40.0f, -40.0f, 0.0f,     1.0f, 1.0f,   // top right
+		40.0f,  0.0f,  0.0f,     1.0f, 0.0f,   // bottom right
+		00.0f,  0.0f,  0.0f,     0.0f, 0.0f,   // bottom left
 
-		-150.0f, -150.0f, 0.0f,     0.0f, 0.0f,   // bottom left
-		-150.0f,  150.0f, 0.0f,     0.0f, 1.0f,    // top left
-		150.0f,  150.0f, 0.0f,     1.0f, 1.0f,   // top right 
+		00.0f,  0.0f,  0.0f,     0.0f, 0.0f,   // bottom left
+		00.0f, -40.0f, 0.0f,     0.0f, 1.0f,    // top left
+		40.0f, -40.0f, 0.0f,     1.0f, 1.0f,   // top right 
 	};
 
 	GLuint program = glCreateProgram();
