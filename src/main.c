@@ -10,6 +10,14 @@
 #include <stb_image/stb_image.h>
 
 int main(void) {
+	int grid[20][15];
+	for (int x=0; x<20; x++) {
+		for (int y=0; y<15; y++) {
+			grid[x][y] = 0;
+		}
+	}
+
+	// Graphics
 	if (!glfwInit()) return -1;
 
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
@@ -122,6 +130,7 @@ int main(void) {
 	stbi_image_free(data);
 
 	glUseProgram(program);
+	glBindVertexArray(VAO);
 	while (!glfwWindowShouldClose(window)) {
 		glClear(GL_COLOR_BUFFER_BIT);
 
@@ -129,14 +138,29 @@ int main(void) {
 		glfwGetWindowSize(window, &width, &height);
 		glUniform2f(scaleLocation, width, height);
 
+		for (int x=0; x<20; x++) {
+			for (int y=0; y<15; y++) {
+				if (grid[x][y] == 1) {
+					glUniform2f(positionLocation, x*40, y*40);
+					glDrawArrays(GL_TRIANGLES, 0, 6);
+				}
+			}
+		}
+
 		double xpos, ypos;
 		glfwGetCursorPos(window, &xpos, &ypos);
 		xpos = floor(xpos/40)*40;
 		ypos = floor(ypos/40)*40;
+
+		int mouse = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
+		if (mouse == GLFW_PRESS) {
+			grid[(int)xpos/40][(int)ypos/40] = 1;
+		}
+
 		glUniform2f(positionLocation, xpos, ypos);
 
 		// glBindTexture(GL_TEXTURE_2D, texture);
-		glBindVertexArray(VAO);
+		
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 		
 		glfwSwapBuffers(window);
