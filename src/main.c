@@ -100,6 +100,7 @@ int main(void) {
 	glBindVertexArray(0);
 
 	int scaleLocation = glGetUniformLocation(program, "scale");
+	int positionLocation = glGetUniformLocation(program, "position");
 
 	// Textures
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -120,7 +121,6 @@ int main(void) {
 
 	stbi_image_free(data);
 
-
 	glUseProgram(program);
 	while (!glfwWindowShouldClose(window)) {
 		glClear(GL_COLOR_BUFFER_BIT);
@@ -128,6 +128,8 @@ int main(void) {
 		int width, height;
 		glfwGetWindowSize(window, &width, &height);
 		glUniform2f(scaleLocation, width, height);
+
+		glUniform2f(positionLocation, 150, 0);
 
 		// glBindTexture(GL_TEXTURE_2D, texture);
 		glBindVertexArray(VAO);
