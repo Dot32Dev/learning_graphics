@@ -9,7 +9,7 @@ uniform vec2 scale;
 uniform vec2 position;
 
 void main() {
-    gl_Position = vec4((aPos.xy + position)/scale, aPos.z, 1.0);
+    gl_Position = vec4(((aPos.x + position.x*2)/scale.x) - 1, ((aPos.y - position.y*2)/scale.y) + 1, aPos.z, 1.0);
 	// gl_Position = vec4(aPos.xy/scale, aPos.z, 1.0);
 	vertexColor = gl_Position;
 	TexCoord = aTexCoord;

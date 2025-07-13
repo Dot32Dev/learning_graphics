@@ -129,7 +129,9 @@ int main(void) {
 		glfwGetWindowSize(window, &width, &height);
 		glUniform2f(scaleLocation, width, height);
 
-		glUniform2f(positionLocation, 150, 0);
+		double xpos, ypos;
+		glfwGetCursorPos(window, &xpos, &ypos);
+		glUniform2f(positionLocation, xpos, ypos);
 
 		// glBindTexture(GL_TEXTURE_2D, texture);
 		glBindVertexArray(VAO);
