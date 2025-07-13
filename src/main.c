@@ -131,6 +131,8 @@ int main(void) {
 
 		double xpos, ypos;
 		glfwGetCursorPos(window, &xpos, &ypos);
+		xpos = floor(xpos/40)*40;
+		ypos = floor(ypos/40)*40;
 		glUniform2f(positionLocation, xpos, ypos);
 
 		// glBindTexture(GL_TEXTURE_2D, texture);
