@@ -24,7 +24,7 @@ int main(void) {
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-	GLFWwindow* window = glfwCreateWindow(800, 600, "My thing", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(800, 600, "Dualgrid C/OpenGL", NULL, NULL);
 	if (!window) return -2;
 
 	glfwMakeContextCurrent(window);
@@ -115,7 +115,7 @@ int main(void) {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	int imageWidth, imageHeight, nrChannels;
-	unsigned char *data = stbi_load("res/tileset.png", &imageWidth, &imageHeight, &nrChannels, 4);
+	unsigned char *data = stbi_load("res/man.jpg", &imageWidth, &imageHeight, &nrChannels, 4);
 
 	unsigned int texture;
 	glGenTextures(1, &texture);  
