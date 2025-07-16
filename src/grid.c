@@ -77,13 +77,13 @@ GLfloat* generate_mesh(int grid[WIDTH][HEIGHT], int* vertices) {
 
 				GLfloat vertices[] = {
 					// positions                                                 // texture coords
-					(GLfloat)TILESIZE + tileX, -(GLfloat)TILESIZE - tileY, 0.0f, ((GLfloat)topRight[0] + tile.type) / 5.0f, (GLfloat)topRight[1],
-					(GLfloat)TILESIZE + tileX,  0.0f              - tileY, 0.0f, ((GLfloat)lowRight[0] + tile.type) / 5.0f, (GLfloat)lowRight[1],
-					00.0f             + tileX,  0.0f              - tileY, 0.0f, ((GLfloat)lowLeft[0]  + tile.type) / 5.0f, (GLfloat)lowLeft[1],  
+					(GLfloat)TILESIZE + tileX, -(GLfloat)TILESIZE - tileY, 0.0f, ((GLfloat)topRight[0] + tile.type) / 6.0f, (GLfloat)topRight[1],
+					(GLfloat)TILESIZE + tileX,  0.0f              - tileY, 0.0f, ((GLfloat)lowRight[0] + tile.type) / 6.0f, (GLfloat)lowRight[1],
+					00.0f             + tileX,  0.0f              - tileY, 0.0f, ((GLfloat)lowLeft[0]  + tile.type) / 6.0f, (GLfloat)lowLeft[1],  
 
-					00.0f             + tileX,  0.0f              - tileY, 0.0f, ((GLfloat)lowLeft[0]  + tile.type) / 5.0f, (GLfloat)lowLeft[1],  
-					00.0f             + tileX, -(GLfloat)TILESIZE - tileY, 0.0f, ((GLfloat)topLeft[0]  + tile.type) / 5.0f, (GLfloat)topLeft[1],   
-					(GLfloat)TILESIZE + tileX, -(GLfloat)TILESIZE - tileY, 0.0f, ((GLfloat)topRight[0] + tile.type) / 5.0f, (GLfloat)topRight[1],
+					00.0f             + tileX,  0.0f              - tileY, 0.0f, ((GLfloat)lowLeft[0]  + tile.type) / 6.0f, (GLfloat)lowLeft[1],  
+					00.0f             + tileX, -(GLfloat)TILESIZE - tileY, 0.0f, ((GLfloat)topLeft[0]  + tile.type) / 6.0f, (GLfloat)topLeft[1],   
+					(GLfloat)TILESIZE + tileX, -(GLfloat)TILESIZE - tileY, 0.0f, ((GLfloat)topRight[0] + tile.type) / 6.0f, (GLfloat)topRight[1],
 				};
 
 				for (int i = 0; i < 6 * 5; i++) {
