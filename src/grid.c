@@ -33,10 +33,10 @@ const Tile lookup[] = {
 };
 
 const float uvCorners[][2] = {
-	{0, 0},
-	{1, 0},
-	{1, 1},
 	{0, 1},
+	{1, 1},
+	{1, 0},
+	{0, 0},
 };
 
 GLfloat* generate_mesh(int grid[WIDTH][HEIGHT], int* vertices) {
