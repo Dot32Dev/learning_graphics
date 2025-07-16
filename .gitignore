@@ -7,3 +7,4 @@ lib/lib-arm64/libglfw.3.dylib
 graphics
 lib/include/stb_image/stb_image.h
 lib/glad.c
+.vscode/launch.json

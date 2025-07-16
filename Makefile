@@ -10,7 +10,8 @@ CFLAGS += -fsanitize=address -g
 
 EXE = $(PROJECT_NAME)
 OBJ = src/main.o \
-	lib/glad.o
+	lib/glad.o \
+	src/grid.o
 DEP = $(OBJ:%.o=%.d)
 
 CLEAN_FILES = $(OBJ) $(EXE)
@@ -22,6 +23,9 @@ RM = rm -f
 .PHONY: default clean compile_flags
 
 default: $(EXE)
+
+run: default
+	./$(EXE)
 
 $(EXE): $(OBJ)
 		# $@ is the target name

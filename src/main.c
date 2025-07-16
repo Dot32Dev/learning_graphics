@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include "grid.h"
 
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
@@ -9,10 +10,14 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image/stb_image.h>
 
+static void gl_set_wireframe(int wireframe) {
+  glPolygonMode(GL_FRONT_AND_BACK, wireframe ? GL_LINE : GL_FILL);
+}
+
 int main(void) {
-	int grid[20][15];
-	for (int x=0; x<20; x++) {
-		for (int y=0; y<15; y++) {
+	int grid[WIDTH][HEIGHT];
+	for (int x=0; x<WIDTH; x++) {
+		for (int y=0; y<HEIGHT; y++) {
 			grid[x][y] = 0;
 		}
 	}
@@ -61,16 +66,19 @@ int main(void) {
 	// 	150.0, -150.0, 0.0,
 	// 	-150.0, -150.0, 0.0,
 	// };
-	GLfloat vertices[] = {
-		// positions          // texture coords
-		40.0f, -40.0f, 0.0f,     1.0f, 1.0f,   // top right
-		40.0f,  0.0f,  0.0f,     1.0f, 0.0f,   // bottom right
-		00.0f,  0.0f,  0.0f,     0.0f, 0.0f,   // bottom left
+	// GLfloat vertices[] = {
+	// 	// positions          // texture coords
+	// 	40.0f, -40.0f, 0.0f,     1.0f, 1.0f,   // top right
+	// 	40.0f,  0.0f,  0.0f,     1.0f, 0.0f,   // bottom right
+	// 	00.0f,  0.0f,  0.0f,     0.0f, 0.0f,   // bottom left
 
-		00.0f,  0.0f,  0.0f,     0.0f, 0.0f,   // bottom left
-		00.0f, -40.0f, 0.0f,     0.0f, 1.0f,    // top left
-		40.0f, -40.0f, 0.0f,     1.0f, 1.0f,   // top right 
-	};
+	// 	00.0f,  0.0f,  0.0f,     0.0f, 0.0f,   // bottom left
+	// 	00.0f, -40.0f, 0.0f,     0.0f, 1.0f,    // top left
+	// 	40.0f, -40.0f, 0.0f,     1.0f, 1.0f,   // top right 
+	// };
+
+	int vertexCount = 0;
+	GLfloat* vertices;
 
 	GLuint program = glCreateProgram();
 
@@ -97,15 +105,12 @@ int main(void) {
 	glBindVertexArray(VAO);
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW); // steam, static or dynamic
+	// glBufferData(GL_ARRAY_BUFFER, vertexCount * 5 * sizeof(GLfloat), vertices, GL_DYNAMIC_DRAW); // steam, static or dynamic
 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 5, (void*)0);
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(1);  
-
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindVertexArray(0);
 
 	int scaleLocation = glGetUniformLocation(program, "scale");
 	int positionLocation = glGetUniformLocation(program, "position");
@@ -115,22 +120,25 @@ int main(void) {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	int imageWidth, imageHeight, nrChannels;
-	unsigned char *data = stbi_load("res/man.jpg", &imageWidth, &imageHeight, &nrChannels, 4);
+	unsigned char *imageData = stbi_load("res/tileset.png", &imageWidth, &imageHeight, &nrChannels, 4);
 
 	unsigned int texture;
 	glGenTextures(1, &texture);  
 	glBindTexture(GL_TEXTURE_2D, texture);
 
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, imageWidth, imageHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, imageWidth, imageHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, imageData);
 	glGenerateMipmap(GL_TEXTURE_2D);
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	stbi_image_free(data);
+	free(imageData);
 
 	glUseProgram(program);
 	glBindVertexArray(VAO);
+
+	glUniform2f(positionLocation, 0, 0);
+	// gl_set_wireframe(1);
 	while (!glfwWindowShouldClose(window)) {
 		glClear(GL_COLOR_BUFFER_BIT);
 
@@ -138,34 +146,51 @@ int main(void) {
 		glfwGetWindowSize(window, &width, &height);
 		glUniform2f(scaleLocation, width, height);
 
-		for (int x=0; x<20; x++) {
-			for (int y=0; y<15; y++) {
-				if (grid[x][y] == 1) {
-					glUniform2f(positionLocation, x*40, y*40);
-					glDrawArrays(GL_TRIANGLES, 0, 6);
-				}
-			}
-		}
+		// for (int x=0; x<WIDTH; x++) {
+		// 	for (int y=0; y<HEIGHT; y++) {
+		// 		if (grid[x][y] == 1) {
+		// 			glUniform2f(positionLocation, x*40, y*40);
+		// 			glDrawArrays(GL_TRIANGLES, 0, 6);
+		// 		}
+		// 	}
+		// }
+
+		// glDrawArrays(GL_TRIANGLES, 0, vertexCount);
 
 		double xpos, ypos;
 		glfwGetCursorPos(window, &xpos, &ypos);
-		xpos = floor(xpos/40)*40;
-		ypos = floor(ypos/40)*40;
+		xpos = floor(xpos/40);
+		ypos = floor(ypos/40);
 
 		int mouse = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
 		if (mouse == GLFW_PRESS) {
-			grid[(int)xpos/40][(int)ypos/40] = 1;
+			if (grid[(int)xpos][(int)ypos] == 0) {
+				grid[(int)xpos][(int)ypos] = 1;
+
+				if (vertexCount > 0) {
+					free(vertices);
+				} 
+
+				vertexCount = 0;
+				vertices = generate_mesh(grid, &vertexCount);
+				glBufferData(GL_ARRAY_BUFFER, vertexCount * 5 * sizeof(GLfloat), vertices, GL_DYNAMIC_DRAW);
+			}
 		}
 
-		glUniform2f(positionLocation, xpos, ypos);
+		glUniform2f(positionLocation, 0, 0);
 
-		// glBindTexture(GL_TEXTURE_2D, texture);
+		glBindTexture(GL_TEXTURE_2D, texture);
 		
-		glDrawArrays(GL_TRIANGLES, 0, 6);
+		if (vertexCount > 0) {
+			glDrawArrays(GL_TRIANGLES, 0, 3 * (vertexCount - 2));
+		}
 		
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
 
 	glDeleteVertexArrays(1, &VAO);
 	glDeleteBuffers(1, &VBO);
