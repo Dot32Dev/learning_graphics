@@ -55,7 +55,6 @@ GLfloat* generate_mesh(int grid[WIDTH][HEIGHT], int* vertices) {
 			dualgrid[x][y] = tileState;
 		}
 	}
-	printf("count %d\n", count);
 
 	GLfloat* mesh = (GLfloat*)malloc(count * sizeof(GLfloat) * 5 * 6);
 
@@ -63,8 +62,6 @@ GLfloat* generate_mesh(int grid[WIDTH][HEIGHT], int* vertices) {
 	for (int x = 0; x < WIDTH + 1; x++) {
 		for (int y = 0; y < HEIGHT + 1; y++) {
 			if (dualgrid[x][y] != 0) {
-				printf("%d, ", dualgrid[x][y]);
-
 				GLfloat tileX = (GLfloat)(x * TILESIZE - TILESIZE / 2);
 				GLfloat tileY = (GLfloat)(y * TILESIZE - TILESIZE / 2);
 
