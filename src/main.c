@@ -39,7 +39,7 @@ int main(void) {
     glfwGetWindowContentScale(window, &xscale, &yscale);
 
 	glViewport(0, 0, 800 * xscale, 600 * yscale);
-	glClearColor(0.5, 0.5, 0.5, 1.0);
+	glClearColor(0.7, 0.55, 0.41, 1.0);
 
 	// Get shaders
 	FILE* frag_file = fopen("res/frag.glsl", "r");
